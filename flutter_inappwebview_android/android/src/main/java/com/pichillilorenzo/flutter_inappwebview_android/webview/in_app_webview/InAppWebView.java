@@ -552,15 +552,31 @@ final public class InAppWebView extends InputAwareWebView implements InAppWebVie
       }
     });
 
+    // setOnLongClickListener(new OnLongClickListener() {
+    //   @Override
+    //   public boolean onLongClick(View v) {
+    //     com.pichillilorenzo.flutter_inappwebview_android.types.HitTestResult hitTestResult =
+    //             com.pichillilorenzo.flutter_inappwebview_android.types.HitTestResult.fromWebViewHitTestResult(getHitTestResult());
+    //     if (channelDelegate != null) channelDelegate.onLongPressHitTestResult(hitTestResult);
+    //     return false;
+    //   }
+    // });
     setOnLongClickListener(new OnLongClickListener() {
-      @Override
-      public boolean onLongClick(View v) {
-        com.pichillilorenzo.flutter_inappwebview_android.types.HitTestResult hitTestResult =
-                com.pichillilorenzo.flutter_inappwebview_android.types.HitTestResult.fromWebViewHitTestResult(getHitTestResult());
-        if (channelDelegate != null) channelDelegate.onLongPressHitTestResult(hitTestResult);
-        return false;
-      }
-    });
+  @Override
+  public boolean onLongClick(View v) {
+    com.pichillilorenzo.flutter_inappwebview_android.types.HitTestResult hitTestResult =
+            com.pichillilorenzo.flutter_inappwebview_android.types.HitTestResult.fromWebViewHitTestResult(getHitTestResult());
+    
+    if (hitTestResult.getType() == WebView.HitTestResult.EDIT_TEXT_TYPE) {
+      // TextInput에 대한 컨텍스트 메뉴 처리
+      showTextInputContextMenu(v);
+      return true;
+    }
+    
+    if (channelDelegate != null) channelDelegate.onLongPressHitTestResult(hitTestResult);
+    return false;
+  }
+});
   }
 
   public void prepareAndAddUserScripts() {
